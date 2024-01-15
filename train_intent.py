@@ -57,12 +57,9 @@ if __name__ == '__main__':
     intents = json.loads(intents_json)
 
     for (display_name, payload)  in intents.items():
-        print(display_name)
         training_phrases_parts = payload['questions']
         message_texts = payload['answer']
-        print(f'{training_phrases_parts=}')
-        print(f'{message_texts=}')
         response = create_intent(project_id, display_name,
-                                 training_phrases_parts, message_texts)
+                                 training_phrases_parts, [message_texts,])
         logger.debug(f'{response=}')
         break
