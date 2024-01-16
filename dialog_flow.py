@@ -6,12 +6,11 @@ from google.cloud import dialogflow
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
 
 
-def detect_intent_texts(project_id, session_id, text, language_code):
+def detect_intent_text(project_id, session_id, text, language_code):
     """Returns the result of detect intent with texts as inputs.
 
     Using the same `session_id` between requests allows continuation

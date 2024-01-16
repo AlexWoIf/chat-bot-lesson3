@@ -1,12 +1,13 @@
 import logging
 import os
 import random
+import telegram
 
 import vk_api as vk
 from dotenv import load_dotenv
 from vk_api.longpoll import VkEventType, VkLongPoll
 
-from dialog_flow import detect_intent_texts
+from dialog_flow import detect_intent_text
 
 
 UNKNOWN_INTENT = 'Default Fallback Intent'
@@ -14,15 +15,26 @@ UNKNOWN_INTENT = 'Default Fallback Intent'
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
+
+
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, bot_token, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = telegram.Bot(bot_token)
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def echo(event, vk_api):
     text = event.text
     session = event.user_id
-    answer = detect_intent_texts(project_id, session, text, 'ru')
+    answer = detect_intent_text(project_id, session, text, 'ru')
     if answer.intent.display_name == UNKNOWN_INTENT:
         return
 
@@ -40,9 +52,21 @@ if __name__ == '__main__':
 
     vk_session = vk.VkApi(token=api_key)
     vk_api = vk_session.get_api()
+    loglevel = os.getenv('LOG_LEVEL', default='INFO')
+    log_chat = os.getenv('LOG_TG_CHAT_ID')
+    log_tg_token = os.getenv('LOG_TG_BOT_TOKEN')
+    logger.setLevel(loglevel)
+    if log_chat:
+        if not log_tg_token:
+            log_tg_token = tg_token
+        logger.addHandler(TelegramLogsHandler(log_tg_token, log_chat))
+    logger.info('Start logging')
 
     longpoll = VkLongPoll(vk_session)
 
-    for event in longpoll.listen():
-        if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            echo(event, vk_api)
+    try:
+        for event in longpoll.listen():
+            if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+                echo(event, vk_api)
+    except Exception as error:
+        logger.error(error)
