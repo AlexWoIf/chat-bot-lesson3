@@ -37,4 +37,4 @@ def detect_intent_texts(project_id, session_id, text, language_code):
             response.query_result.intent_detection_confidence,
         )
     )
-    return response.query_result.fulfillment_text
+    return response.query_result

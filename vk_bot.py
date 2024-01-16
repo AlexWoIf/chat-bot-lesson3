@@ -9,6 +9,9 @@ from vk_api.longpoll import VkEventType, VkLongPoll
 from dialog_flow import detect_intent_texts
 
 
+UNKNOWN_INTENT = 'Default Fallback Intent'
+
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO,
@@ -20,10 +23,12 @@ def echo(event, vk_api):
     text = event.text
     session = event.user_id
     answer = detect_intent_texts(project_id, session, text, 'ru')
+    if answer.intent.display_name == UNKNOWN_INTENT:
+        return
 
     vk_api.messages.send(
         user_id=event.user_id,
-        message=answer,
+        message=answer.fulfillment_text,
         random_id=random.randint(1, 1000)
     )
 
@@ -39,11 +44,5 @@ if __name__ == '__main__':
     longpoll = VkLongPoll(vk_session)
 
     for event in longpoll.listen():
-        if event.type == VkEventType.MESSAGE_NEW:
-            print('Новое сообщение:')
-            if event.to_me:
-                print('Для меня от: ', event.user_id)
-                echo(event, vk_api)
-            else:
-                print('От меня для: ', event.user_id)
-            print('Текст:', event.text)
+        if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+            echo(event, vk_api)

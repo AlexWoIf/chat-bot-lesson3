@@ -18,7 +18,7 @@ def echo(update, context):
     text = update.message.text
     session = update.effective_chat.id
     answer = detect_intent_texts(project_id, session, text, 'ru')
-    update.message.reply_text(answer)
+    update.message.reply_text(answer.fulfillment_text)
 
 
 def main():
