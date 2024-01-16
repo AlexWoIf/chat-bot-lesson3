@@ -56,10 +56,18 @@ if __name__ == '__main__':
         intents_json = source_file.read()
     intents = json.loads(intents_json)
 
-    for (display_name, payload)  in intents.items():
-        training_phrases_parts = payload['questions']
-        message_texts = payload['answer']
-        response = create_intent(project_id, display_name,
-                                 training_phrases_parts, [message_texts,])
-        logger.debug(f'{response=}')
-        break
+    headers = {}
+    for id, (display_name, payload)  in enumerate(intents.items()):
+        print(f'[{id}] {display_name}')
+        headers[id] = display_name
+    print('Выберите номер тематики, которую хотите добавить боту:')
+    id = int(input())
+    theme = headers[id]
+    print(f'Вы выбрали тему: {theme}')
+    payload = intents[theme]
+
+    training_phrases_parts = payload['questions']
+    message_texts = payload['answer']
+    response = create_intent(project_id, theme,
+                                training_phrases_parts, [message_texts,])
+    logger.debug(f'{response=}')
