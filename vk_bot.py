@@ -16,7 +16,7 @@ UNKNOWN_INTENT = 'Default Fallback Intent'
 logger = logging.getLogger(__file__)
 
 
-def echo(event, vk_api):
+def reply(event, vk_api):
     text = event.text
     session = event.user_id
     answer = detect_intent_text(project_id, session, text, 'ru')
@@ -52,6 +52,6 @@ if __name__ == '__main__':
     try:
         for event in longpoll.listen():
             if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-                echo(event, vk_api)
+                reply(event, vk_api)
     except Exception as error:
         logger.error(error)
