@@ -13,10 +13,7 @@ from dialog_flow import detect_intent_text
 UNKNOWN_INTENT = 'Default Fallback Intent'
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 class TelegramLogsHandler(logging.Handler):

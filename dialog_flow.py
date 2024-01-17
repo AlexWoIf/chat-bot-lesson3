@@ -4,10 +4,7 @@ import logging
 from google.cloud import dialogflow
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 def detect_intent_text(project_id, session_id, text, language_code):

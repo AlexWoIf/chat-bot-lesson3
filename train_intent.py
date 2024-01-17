@@ -9,11 +9,7 @@ from google.cloud import dialogflow
 SOURCE_FILE_PATH='./question.json'
 
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.DEBUG,
-)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 
 
 def create_intent(project_id, display_name, training_phrases_parts,
