@@ -6,9 +6,6 @@ from dotenv import load_dotenv
 from google.cloud import dialogflow
 
 
-SOURCE_FILE_PATH='./question.json'
-
-
 logger = logging.getLogger(__file__)
 
 
@@ -47,8 +44,11 @@ if __name__ == '__main__':
     load_dotenv()
     api_key = os.getenv('GOOGLE_CLOUD_API_KEY')
     project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
+    source = os.getenv('SOURCE_FILE_PATH', default='./question.json')
+    loglevel = os.getenv('LOG_LEVEL', default='INFO')
+    logger.setLevel(loglevel)
 
-    with open(SOURCE_FILE_PATH, 'r', encoding='UTF-8', ) as source_file:
+    with open(source, 'r', encoding='UTF-8', ) as source_file:
         intents_json = source_file.read()
     intents = json.loads(intents_json)
 

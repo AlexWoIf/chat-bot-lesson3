@@ -55,7 +55,7 @@ if __name__ == '__main__':
     logger.setLevel(loglevel)
     if log_chat:
         if not log_tg_token:
-            log_tg_token = tg_token
+            log_tg_token = os.getenv('TELEGRAM_BOT_TOKEN')
         logger.addHandler(TelegramLogsHandler(log_tg_token, log_chat))
     logger.info('Start logging')
 
