@@ -46,9 +46,7 @@ if __name__ == '__main__':
     project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
     source = os.getenv('SOURCE_FILE_PATH', default='./question.json')
     loglevel = os.getenv('LOG_LEVEL', default='INFO')
-    print(loglevel)
     logger.setLevel(loglevel)
-    print(logger.getEffectiveLevel())
     logger.info('Start logging')
 
     with open(source, 'r', encoding='UTF-8', ) as source_file:
