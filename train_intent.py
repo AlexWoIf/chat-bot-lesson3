@@ -56,15 +56,19 @@ if __name__ == '__main__':
     for theme_id, (display_name, payload)  in enumerate(intents.items(), 1):
         print(f'[{theme_id}] {display_name}')
         headers[theme_id] = display_name
-    print('Выберите номер тематики, которую хотите добавить боту,'
+    print('Выберите номер тематики, которую хотите добавить боту, '
           'либо введите 0, чтобы добавить сразу все темы:')
     theme_id = int(input())
-    theme = headers[theme_id]
-    print(f'Вы выбрали тему: {theme}')
-    payload = intents[theme]
+    if theme_id:
+        themes = [headers[theme_id]]
+    else:
+        themes = headers.values()
+    print(f'Вы выбрали тему(ы): {themes}')
 
-    training_phrases_parts = payload['questions']
-    message_texts = payload['answer']
-    response = create_intent(project_id, theme,
-                                training_phrases_parts, [message_texts,])
-    logger.debug(f'{response=}')
+    for theme in themes:
+        payload = intents[theme]
+        training_phrases_parts = payload['questions']
+        message_texts = payload['answer']
+        response = create_intent(project_id, theme,
+                                    training_phrases_parts, [message_texts,])
+        logger.debug(f'{response=}')
