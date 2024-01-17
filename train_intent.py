@@ -46,7 +46,10 @@ if __name__ == '__main__':
     project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
     source = os.getenv('SOURCE_FILE_PATH', default='./question.json')
     loglevel = os.getenv('LOG_LEVEL', default='INFO')
+    print(loglevel)
     logger.setLevel(loglevel)
+    print(logger.getEffectiveLevel())
+    logger.info('Start logging')
 
     with open(source, 'r', encoding='UTF-8', ) as source_file:
         intents_json = source_file.read()
@@ -69,6 +72,9 @@ if __name__ == '__main__':
         payload = intents[theme]
         training_phrases_parts = payload['questions']
         message_texts = payload['answer']
-        response = create_intent(project_id, theme,
+        try:
+            response = create_intent(project_id, theme,
                                     training_phrases_parts, [message_texts,])
-        logger.debug(f'{response=}')
+        except Exception as e:
+            logger.error(f'{e}')
+            continue

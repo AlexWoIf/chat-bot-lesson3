@@ -19,14 +19,6 @@ def reply(update, context):
     update.message.reply_text(answer.fulfillment_text)
 
 
-def main():
-    updater = Updater(tg_token)
-    dispatcher = updater.dispatcher
-    dispatcher.add_handler(MessageHandler(Filters.text, reply))
-    updater.start_polling()
-    updater.idle()
-
-
 if __name__ == '__main__':
     load_dotenv()
     api_key = os.getenv('GOOGLE_CLOUD_API_KEY')
@@ -43,6 +35,10 @@ if __name__ == '__main__':
     logger.info('Start logging')
 
     try:
-        main()
+        updater = Updater(tg_token)
+        dispatcher = updater.dispatcher
+        dispatcher.add_handler(MessageHandler(Filters.text, reply))
+        updater.start_polling()
+        updater.idle()
     except Exception as error:
         logger.error(error)
