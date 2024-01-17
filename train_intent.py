@@ -53,12 +53,13 @@ if __name__ == '__main__':
     intents = json.loads(intents_json)
 
     headers = {}
-    for id, (display_name, payload)  in enumerate(intents.items()):
-        print(f'[{id}] {display_name}')
-        headers[id] = display_name
-    print('Выберите номер тематики, которую хотите добавить боту:')
-    id = int(input())
-    theme = headers[id]
+    for theme_id, (display_name, payload)  in enumerate(intents.items(), 1):
+        print(f'[{theme_id}] {display_name}')
+        headers[theme_id] = display_name
+    print('Выберите номер тематики, которую хотите добавить боту,'
+          'либо введите 0, чтобы добавить сразу все темы:')
+    theme_id = int(input())
+    theme = headers[theme_id]
     print(f'Вы выбрали тему: {theme}')
     payload = intents[theme]
 
