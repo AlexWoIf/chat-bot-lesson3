@@ -1,31 +1,19 @@
 import logging
 import os
 import random
-import telegram
 
 import vk_api as vk
 from dotenv import load_dotenv
 from vk_api.longpoll import VkEventType, VkLongPoll
 
 from dialog_flow import detect_intent_text
+from logger_handlers import TelegramLogsHandler
 
 
 UNKNOWN_INTENT = 'Default Fallback Intent'
 
 
 logger = logging.getLogger(__file__)
-
-
-class TelegramLogsHandler(logging.Handler):
-
-    def __init__(self, bot_token, chat_id):
-        super().__init__()
-        self.chat_id = chat_id
-        self.tg_bot = telegram.Bot(bot_token)
-
-    def emit(self, record):
-        log_entry = self.format(record)
-        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
 def echo(event, vk_api):
