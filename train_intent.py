@@ -71,5 +71,5 @@ if __name__ == '__main__':
             response = create_intent(project_id, theme,
                                     training_phrases_parts, [message_texts,])
         except Exception as e:
-            logger.error(f'{e}')
+            logger.error(e)
             continue
