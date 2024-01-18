@@ -60,10 +60,7 @@ if __name__ == '__main__':
     print('Выберите номер тематики, которую хотите добавить боту, '
           'либо введите 0, чтобы добавить сразу все темы:')
     theme_id = int(input())
-    if theme_id:
-        themes = [headers[theme_id]]
-    else:
-        themes = headers.values()
+    themes = [headers[theme_id]] if theme_id else headers.values()
     print(f'Вы выбрали тему(ы): {themes}')
 
     for theme in themes:
