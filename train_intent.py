@@ -64,9 +64,7 @@ if __name__ == '__main__':
     print(f'Вы выбрали тему(ы): {themes}')
 
     for theme in themes:
-        payload = intents[theme]
-        training_phrases_parts = payload['questions']
-        message_texts = payload['answer']
+        training_phrases_parts, message_texts = intents[theme].values()
         try:
             response = create_intent(project_id, theme,
                                     training_phrases_parts, [message_texts,])
