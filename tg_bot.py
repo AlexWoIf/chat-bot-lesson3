@@ -11,7 +11,7 @@ from logger_handlers import TelegramLogsHandler
 logger = logging.getLogger(__file__)
 
 
-def reply(update, context):
+def reply(update, context, project_id):
     logger.debug(f'Enter reply {update.message.text=}')
     text = update.message.text
     session = update.effective_chat.id
@@ -34,10 +34,12 @@ if __name__ == '__main__':
         logger.addHandler(TelegramLogsHandler(log_tg_token, log_chat))
     logger.info('Start logging')
 
+    reply_callback = lambda update, context: reply(update, context, project_id)
+
     try:
         updater = Updater(tg_token)
         dispatcher = updater.dispatcher
-        dispatcher.add_handler(MessageHandler(Filters.text, reply))
+        dispatcher.add_handler(MessageHandler(Filters.text, reply_callback))
         updater.start_polling()
         updater.idle()
     except Exception as error:
